@@ -3,15 +3,15 @@ let zIndex = 1;
 const desktop = document.getElementById("desktop");
 const taskApps = document.getElementById("task-apps");
 
-////////////////////////////
+//////////////////////////////
 // WINDOW SYSTEM
-////////////////////////////
+//////////////////////////////
 
 function createWindow(id,title,content){
 
   if(document.getElementById(id)) return;
 
-  const win = document.createElement("div");
+  const win=document.createElement("div");
   win.className="window";
   win.id=id;
 
@@ -47,9 +47,9 @@ function minimize(id){
   document.getElementById(id).style.display="none";
 }
 
-////////////////////////////
+//////////////////////////////
 // TASKBAR
-////////////////////////////
+//////////////////////////////
 
 function addTaskIcon(id,title){
   if(document.getElementById("task-"+id)) return;
@@ -62,11 +62,12 @@ function addTaskIcon(id,title){
   taskApps.appendChild(icon);
 }
 
-////////////////////////////
-// DRAG SYSTEM
-////////////////////////////
+//////////////////////////////
+// DRAG + SNAP
+//////////////////////////////
 
 function dragStart(e,win){
+
   let shiftX=e.clientX-win.getBoundingClientRect().left;
   let shiftY=e.clientY-win.getBoundingClientRect().top;
 
@@ -85,17 +86,19 @@ function dragStart(e,win){
   };
 }
 
-////////////////////////////
-// START MENU (Phase 2)
-////////////////////////////
-
-function toggleStart(){
-  alert("Start Menu Coming in Phase 2 🔥");
+function snapLeft(id){
+  const win=document.getElementById(id);
+  win.classList.add("maximized");
 }
 
-////////////////////////////
+function snapRight(id){
+  const win=document.getElementById(id);
+  win.classList.add("maximized");
+}
+
+//////////////////////////////
 // THEME SYSTEM
-////////////////////////////
+//////////////////////////////
 
 function toggleTheme(){
   document.body.classList.toggle("dark");
@@ -105,4 +108,67 @@ function toggleTheme(){
 
 if(localStorage.theme){
   document.body.className=localStorage.theme;
+}
+
+//////////////////////////////
+// FILE SYSTEM
+//////////////////////////////
+
+function saveFile(name,data){
+  localStorage.setItem("vexo_file_"+name,data);
+}
+
+function loadFile(name){
+  return localStorage.getItem("vexo_file_"+name);
+}
+
+function deleteFile(name){
+  localStorage.removeItem("vexo_file_"+name);
+}
+
+//////////////////////////////
+// WALLPAPER
+//////////////////////////////
+
+function setWallpaper(url){
+  document.body.style.backgroundImage=`url(${url})`;
+  document.body.style.backgroundSize="cover";
+  localStorage.wallpaper=url;
+}
+
+if(localStorage.wallpaper){
+  setWallpaper(localStorage.wallpaper);
+}
+
+//////////////////////////////
+// SETTINGS APP
+//////////////////////////////
+
+function openSettings(){
+  createWindow("settings","Settings",`
+    <h3>Theme</h3>
+    <button onclick="toggleTheme()">Toggle Theme</button>
+
+    <h3>Wallpaper</h3>
+    <input id="wp" placeholder="Image URL">
+    <button onclick="setWallpaper(document.getElementById('wp').value)">
+      Set
+    </button>
+  `);
+}
+
+//////////////////////////////
+// START MENU
+//////////////////////////////
+
+function toggleStart(){
+  openSettings();
+}
+
+//////////////////////////////
+// PWA
+//////////////////////////////
+
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("service-worker.js");
 }
