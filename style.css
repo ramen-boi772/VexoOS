@@ -1,0 +1,55 @@
+body{
+margin:0;
+font-family:Segoe UI;
+overflow:hidden;
+}
+
+.light{background:#eaeef5;}
+.dark{background:#111;color:white;}
+
+#desktop{
+position:relative;
+width:100vw;
+height:calc(100vh - 40px);
+}
+
+.window{
+position:absolute;
+width:400px;
+background:white;
+border-radius:12px;
+box-shadow:0 20px 50px rgba(0,0,0,.3);
+display:none;
+flex-direction:column;
+}
+
+.header{
+background:#0078ff;
+color:white;
+padding:8px;
+cursor:move;
+display:flex;
+justify-content:space-between;
+}
+
+.content{
+padding:10px;
+flex:1;
+}
+
+#taskbar{
+height:40px;
+background:#1a1a1a;
+color:white;
+display:flex;
+align-items:center;
+padding:0 10px;
+gap:10px;
+}
+
+#task-apps div{
+cursor:pointer;
+padding:4px 8px;
+background:#333;
+border-radius:6px;
+}
