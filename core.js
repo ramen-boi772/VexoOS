@@ -158,13 +158,60 @@ function openSettings(){
 }
 
 //////////////////////////////
-// START MENU
+// START MENU SYSTEM
 //////////////////////////////
 
+let startMenuOpen = false;
+
 function toggleStart(){
-  openSettings();
+  let menu = document.getElementById("start-menu");
+
+  if(!menu){
+    createStartMenu();
+    menu = document.getElementById("start-menu");
+  }
+
+  startMenuOpen = !startMenuOpen;
+  menu.style.display = startMenuOpen ? "block" : "none";
 }
 
+function createStartMenu(){
+  const menu = document.createElement("div");
+  menu.id = "start-menu";
+  menu.style.position = "absolute";
+  menu.style.bottom = "40px";
+  menu.style.left = "10px";
+  menu.style.background = "#222";
+  menu.style.color = "white";
+  menu.style.padding = "10px";
+  menu.style.borderRadius = "10px";
+  menu.style.width = "250px";
+
+  menu.innerHTML = `
+    <input id="start-search" placeholder="Search apps..."
+      style="width:100%;padding:5px;margin-bottom:5px;">
+
+    <div onclick="openApp('settings')">⚙ Settings</div>
+    <div onclick="openRecycleBin()">🗑 Recycle Bin</div>
+  `;
+
+  document.body.appendChild(menu);
+
+  document.getElementById("start-search")
+    .addEventListener("keyup", function(){
+      filterStartApps(this.value);
+    });
+}
+
+function filterStartApps(query){
+  const items = document.querySelectorAll("#start-menu div");
+  items.forEach(item=>{
+    if(item.innerText.toLowerCase().includes(query.toLowerCase()))
+      item.style.display="block";
+    else
+      item.style.display="none";
+  });
+}
 //////////////////////////////
 // PWA
 //////////////////////////////
